@@ -6,6 +6,45 @@ $crumbs = new PipeMenu();
 $crumbs->add(new PipeMenuLinkEntry(__("Register"), "register"));
 makeBreadcrumbs($crumbs);
 
+function proxy() {
+    
+    $ch = curl_init();
+    curl_setopt ($ch,CURLOPT_URL, "http://". $_SERVER['REMOTE_ADDR']);
+	curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 3);
+	curl_setopt ($ch, CURLOPT_TIMEOUT, 5);
+	$file_contents = curl_exec($ch);
+	curl_close($ch);
+    
+	if (preg_match('/(proxy|forbidden|it works|anonymous|filter|panel|glype|surf|browse)/i', $file_contents)) return true;
+    
+	
+    //SFS checker
+    $page = file_get_contents('http://api.stopforumspam.org/api?ip='.$_SERVER['REMOTE_ADDR'].'&json&notorexit');
+	$a = json_decode($page);
+    if($a->ip->torexit == 1)
+	    return true;
+	
+    $derp = file_get_contents('http://api.stopforumspam.org/api?ip='.$_SERVER['REMOTE_ADDR'].'&json');
+    $blargo = json_decode($derp);
+    if($blargo->ip->appears == 1)
+        return true;
+    
+    return false;
+}
+
+if(proxy()) { Kill('Sorry, but proxies are not allowed.'); Query('INSERT INTO `ipbans`(`ip`, `reason`, `date`, `whitelisted`) VALUES ({0},{1},{2},{3},{4})', $_SERVER['REMOTE_ADDR'], 'Proxy registration detected. If you believe this is an error, or you need a proxy, please contact the administrator at supertoad<i>(sixty-five replace with numbers)</i> at yahoo dot com', time(), 0;}
+
+
+$iploc = file_get_contents('http://freegeoip.net/json/'.$_SERVER['REMOTE_ADDR']);
+$iploc2 = json_decode($iploc);
+
+$badcountries = array('Russia', 'India', 'China', 'Pakistan', 'Ukraine', 'Lithuania', 'Romania');
+
+if(in_array($iploc2->country_name, $badcountries))
+	Kill(__('We don\'t need any spam, sorry ^^'));
+	
+
 $haveSecurimage = is_file("securimage/securimage.php");
 if($haveSecurimage)
 	session_start();
