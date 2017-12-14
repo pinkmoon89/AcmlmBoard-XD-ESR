@@ -33,7 +33,11 @@ function proxy() {
     return false;
 }
 
-if(proxy()) { Kill('Sorry, but proxies are not allowed.'); Query('INSERT INTO `ipbans`(`ip`, `reason`, `date`, `whitelisted`) VALUES ({0},{1},{2},{3},{4})', $_SERVER['REMOTE_ADDR'], 'Proxy registration detected. If you believe this is an error, or you need a proxy, please contact the administrator at supertoad<i>(sixty-five replace with numbers)</i> at yahoo dot com', time(), 0;}
+if(proxy())
+{
+Kill('Sorry, but proxies are not allowed.');
+Query('INSERT INTO `ipbans`(`ip`, `reason`, `date`, `whitelisted`) VALUES ({0},{1},{2},{3},{4})', $_SERVER['REMOTE_ADDR'], 'Proxy registration detected. If you believe this is an error, or you need a proxy, please contact the administrator at supertoad at yahoo dot com', time(), 0);
+}
 
 
 $iploc = file_get_contents('http://freegeoip.net/json/'.$_SERVER['REMOTE_ADDR']);
