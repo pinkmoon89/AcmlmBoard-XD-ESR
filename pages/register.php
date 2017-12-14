@@ -36,7 +36,7 @@ function proxy() {
 if(proxy())
 {
 Kill('Sorry, but proxies are not allowed.');
-Query('INSERT INTO `ipbans`(`ip`, `reason`, `date`, `whitelisted`) VALUES ({0},{1},{2},{3},{4})', $_SERVER['REMOTE_ADDR'], 'Proxy registration detected. If you believe this is an error, or you need a proxy, please contact the administrator at supertoad at yahoo dot com', time(), 0);
+Query('INSERT INTO `ipbans`(`ip`, `reason`, `date`, `whitelisted`) VALUES ({0},{1},{2},{3},{4})', $_SERVER['REMOTE_ADDR'], 'Proxy registration detected.', time(), 0);
 }
 
 
